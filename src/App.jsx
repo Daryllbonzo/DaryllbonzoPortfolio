@@ -1,5 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
+const [cursor, setCursor] = useState({ x: 0, y: 0 });
 
+useEffect(() => {
+  const move = (e) => {
+    setCursor({ x: e.clientX, y: e.clientY });
+  };
+
+  window.addEventListener("mousemove", move);
+  return () => window.removeEventListener("mousemove", move);
+}, []);
 export default function App() {
   const [progress, setProgress] = useState(0);
   const [dark, setDark] = useState(true);
@@ -112,6 +121,29 @@ export default function App() {
           --green: #22c55e;
           --green-soft: rgba(34,197,94,0.18);
           --blue: #3b82f6;
+          body {
+  cursor: none; }
+  .custom-cursor {
+  width: 32px;
+  height: 32px;
+  background: black;
+
+  /* triangle shape */
+  clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+
+  /* white border */
+  border: 3px solid white;
+
+  /* glow */
+  box-shadow:
+    0 0 10px rgba(34, 197, 94, 0.7),
+    0 0 20px rgba(34, 197, 94, 0.5),
+    0 0 35px rgba(34, 197, 94, 0.4);
+
+  border-radius: 6px;
+
+  transform: rotate(0deg);
+}
         }
 
         * { box-sizing: border-box; }
@@ -535,6 +567,19 @@ export default function App() {
       `}</style>
 
       <div className="page">
+        <div
+  style={{
+    position: "fixed",
+    left: cursor.x,
+    top: cursor.y,
+    transform: "translate(-50%, -50%)",
+    pointerEvents: "none",
+    zIndex: 9999,
+    transition: "all 0.08s linear"
+  }}
+>
+  <div className="custom-cursor" />
+</div>
         <div className="bg-grid" />
 
         <svg className="bg-chart" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -750,6 +795,18 @@ export default function App() {
             <p>
               I bring strong organization, quick adaptability, careful attention to detail, and a dependable work style. Even while transitioning into the VA role, I already have the habits clients value most: clear communication, research ability, accurate execution, and a mindset focused on making work easier for the business owner.
             </p>
+            <div
+  style={{
+    position: "fixed",
+    left: cursor.x,
+    top: cursor.y,
+    transform: "translate(-50%, -50%)",
+    pointerEvents: "none",
+    zIndex: 9999,
+  }}
+>
+  <div className="custom-cursor" />
+</div>
           </div>
         )}
       </div>
