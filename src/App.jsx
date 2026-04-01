@@ -667,12 +667,21 @@ export default function App() {
               I may be transitioning into the General Virtual Assistant role, but the skills behind great VA work are already part of my experience: organization, research, data accuracy, reporting, clear communication, and adapting quickly to systems.
             </p>
             <div className="grid-2">
-              {strengths.map((item) => (
-                <div className="card strength-card" key={item}>
-                  <h3>Professional Strength</h3>
-                  <p>{item}</p>
-                </div>
-              ))}
+              {strengths.map((item, index) => {
+  const titles = [
+    "Fast Learner",
+    "Attention to Detail",
+    "Organized & Reliable",
+    "Consistent Execution"
+  ];
+
+  return (
+    <div className="card strength-card" key={item}>
+      <h3>{titles[index]}</h3>
+      <p>{item}</p>
+    </div>
+  );
+})}
             </div>
           </section>
 
