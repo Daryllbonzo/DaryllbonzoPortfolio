@@ -24,7 +24,17 @@ const workflow = [
   { step: "04", title: "Keep things moving", text: "Clients get more time for strategy and growth." },
 ];
 
-const platforms = ["Google Workspace", "Microsoft Excel", "Google Calendar", "Zoom", "Slack", "Notion", "Canva", "Google Docs", "Gmail"];
+const platforms = [
+  { id: "workspace", label: "Google Workspace" },
+  { id: "excel", label: "Microsoft Excel" },
+  { id: "calendar", label: "Google Calendar" },
+  { id: "zoom", label: "Zoom" },
+  { id: "slack", label: "Slack" },
+  { id: "notion", label: "Notion" },
+  { id: "canva", label: "Canva" },
+  { id: "docs", label: "Google Docs" },
+  { id: "gmail", label: "Gmail" },
+];
 
 const supportSignals = [
   { title: "Inbox clarity", stat: "Priority handling", text: "Important conversations stay visible, cleaner to sort, and easier to follow through.", level: 88 },
@@ -136,6 +146,98 @@ function LinkButton({ href, className = "", children }) {
       {ripples.map((ripple) => <i className="ripple" key={ripple.id} style={{ width: ripple.size, height: ripple.size, left: ripple.x, top: ripple.y }} />)}
     </a>
   );
+}
+
+function PlatformIcon({ id }) {
+  switch (id) {
+    case "workspace":
+      return (
+        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
+          <rect x="8" y="18" width="14" height="28" rx="7" fill="#34A853" />
+          <rect x="22" y="10" width="14" height="44" rx="7" fill="#4285F4" opacity="0.96" />
+          <rect x="28" y="22" width="14" height="22" rx="7" fill="#FBBC05" />
+          <rect x="42" y="18" width="14" height="28" rx="7" fill="#EA4335" />
+        </svg>
+      );
+    case "excel":
+      return (
+        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
+          <path d="M18 12h22a6 6 0 0 1 6 6v28a6 6 0 0 1-6 6H18z" fill="#107C41" />
+          <path d="M40 12h6a6 6 0 0 1 6 6v28a6 6 0 0 1-6 6h-6z" fill="#21A366" />
+          <rect x="10" y="18" width="22" height="28" rx="4" fill="#185C37" />
+          <path d="m16 26 5 6-5 6h4.8l2.7-3.8 2.7 3.8H31l-5.2-6 5-6h-4.7l-2.5 3.5-2.4-3.5z" fill="#fff" />
+        </svg>
+      );
+    case "calendar":
+      return (
+        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
+          <rect x="10" y="14" width="44" height="40" rx="10" fill="#fff" />
+          <path d="M10 24a10 10 0 0 1 10-10h24a10 10 0 0 1 10 10v4H10z" fill="#4285F4" />
+          <rect x="18" y="10" width="4" height="10" rx="2" fill="#4285F4" />
+          <rect x="42" y="10" width="4" height="10" rx="2" fill="#4285F4" />
+          <path d="M24 43V30h5.5l2.4 3.4 2.4-3.4H40v13h-4.5v-6.7l-3.5 4.8-3.5-4.8V43z" fill="#34A853" />
+        </svg>
+      );
+    case "zoom":
+      return (
+        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
+          <rect x="10" y="18" width="32" height="28" rx="12" fill="#2D8CFF" />
+          <path d="M42 26.5 54 21v22l-12-5.5a4 4 0 0 1-2-3.5v-4a4 4 0 0 1 2-3.5Z" fill="#54A5FF" />
+        </svg>
+      );
+    case "slack":
+      return (
+        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
+          <rect x="14" y="8" width="10" height="24" rx="5" fill="#36C5F0" />
+          <rect x="20" y="14" width="24" height="10" rx="5" fill="#2EB67D" />
+          <rect x="40" y="14" width="10" height="24" rx="5" fill="#ECB22E" />
+          <rect x="14" y="40" width="24" height="10" rx="5" fill="#E01E5A" />
+        </svg>
+      );
+    case "notion":
+      return (
+        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
+          <rect x="12" y="12" width="40" height="40" rx="8" fill="#fff" />
+          <rect x="12" y="12" width="40" height="40" rx="8" fill="none" stroke="#111" strokeWidth="4" />
+          <path d="M23 42V22h4.5l13.5 12.8V22H46v20h-4L28 28.6V42z" fill="#111" />
+        </svg>
+      );
+    case "canva":
+      return (
+        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
+          <defs>
+            <linearGradient id="canvaGlow" x1="0%" x2="100%" y1="0%" y2="100%">
+              <stop offset="0%" stopColor="#5B6CFF" />
+              <stop offset="100%" stopColor="#00C4CC" />
+            </linearGradient>
+          </defs>
+          <circle cx="32" cy="32" r="22" fill="url(#canvaGlow)" />
+          <path d="M39.2 40.3c-1.8 2.1-4.4 3.2-7.2 3.2-5.9 0-10.3-4.3-10.3-10.7S26.1 22 32 22c2.8 0 5.2.8 7.1 2.5l-2.6 3.1c-1.1-1-2.6-1.6-4.3-1.6-3.4 0-5.8 2.8-5.8 6.7s2.3 6.8 5.8 6.8c1.8 0 3.3-.7 4.4-1.9z" fill="#fff" />
+        </svg>
+      );
+    case "docs":
+      return (
+        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
+          <path d="M20 10h18l10 10v30a4 4 0 0 1-4 4H20a4 4 0 0 1-4-4V14a4 4 0 0 1 4-4Z" fill="#4285F4" />
+          <path d="M38 10v10h10z" fill="#AECBFA" />
+          <rect x="24" y="28" width="16" height="3.5" rx="1.75" fill="#fff" />
+          <rect x="24" y="35" width="16" height="3.5" rx="1.75" fill="#fff" />
+          <rect x="24" y="42" width="12" height="3.5" rx="1.75" fill="#fff" />
+        </svg>
+      );
+    case "gmail":
+      return (
+        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
+          <rect x="10" y="16" width="44" height="32" rx="8" fill="#fff" />
+          <path d="M16 22 32 34 48 22" fill="none" stroke="#EA4335" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M16 44V24l8 6v14z" fill="#34A853" />
+          <path d="M48 44V24l-8 6v14z" fill="#4285F4" />
+          <path d="M16 22h4l12 9.2L44 22h4" fill="#FBBC05" />
+        </svg>
+      );
+    default:
+      return null;
+  }
 }
 
 export default function App() {
@@ -261,7 +363,16 @@ export default function App() {
 
           <section className="section" data-reveal id="platforms">
             <div className="heading"><small>Platforms and Workflow</small><h2>Comfortable with the everyday platforms remote clients already use</h2><p>I can work inside the tools commonly used for scheduling, communication, spreadsheets, documentation, task coordination, and research support.</p></div>
-            <div className="tool-box">{platforms.map((tool) => <span key={tool}>{tool}</span>)}</div>
+            <div className="platform-cloud">
+              {platforms.map((tool, index) => (
+                <article className={`platform-chip is-${tool.id}`} key={tool.id} style={{ "--float-delay": `${index * -0.8}s`, "--float-duration": `${7.2 + (index % 3) * 1.2}s` }}>
+                  <div className="platform-mark">
+                    <PlatformIcon id={tool.id} />
+                  </div>
+                  <strong>{tool.label}</strong>
+                </article>
+              ))}
+            </div>
             <div className="note">My background strengthened my ability to work with information-heavy tasks, organize details clearly, build clean reports, monitor updates, and stay accurate inside recurring workflows. Those habits translate naturally into dependable virtual assistance.</div>
             <div className="result-grid">{liveSignals.map((item) => <article className="card result" key={item.title}><div className="result-head"><small>{item.stat}</small><strong className="result-percent">{item.liveLevel}%</strong></div><h3>{item.title}</h3><p>{item.text}</p><i><b style={{ width: `${item.liveLevel}%` }} /></i></article>)}</div>
           </section>
