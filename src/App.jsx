@@ -27,16 +27,54 @@ const workflow = [
 const tools = ["Google Sheets", "Excel", "Google Calendar", "Zoom", "Slack", "Notion", "Canva", "Google Docs", "Gmail"];
 
 const results = [
-  { title: "Lead Tracking Cleanup", stat: "+38% faster follow-ups", text: "Removed duplicate entries and built a clearer lead view.", level: "88%" },
-  { title: "Inbox Workflow Setup", stat: "Less missed messages", text: "Created priority labels and follow-up reminders for better response handling.", level: "82%" },
-  { title: "Research Summary Dashboard", stat: "Clearer decisions", text: "Turned scattered notes into one summary view for easier action.", level: "91%" },
+  { title: "Lead Tracking Cleanup", stat: "+38% faster follow-ups", text: "Removed duplicate entries and built a clearer lead view.", level: 88 },
+  { title: "Inbox Workflow Setup", stat: "Less missed messages", text: "Created priority labels and follow-up reminders for better response handling.", level: 82 },
+  { title: "Research Summary Dashboard", stat: "Clearer decisions", text: "Turned scattered notes into one summary view for easier action.", level: 91 },
+];
+
+const positioning = [
+  {
+    title: "Transferable strengths clients can use now",
+    text: "Even while I continue building direct General Virtual Assistant title experience, I already bring the core habits clients actually pay for: organization, research discipline, data accuracy, reporting, responsiveness, and dependable follow-through.",
+  },
+  {
+    title: "Fast onboarding with clear instructions",
+    text: "Give me your preferred tools, process, and priorities, and I can quickly adapt to your workflow without creating unnecessary confusion or rework.",
+  },
+  {
+    title: "Reliable support for recurring operations",
+    text: "I am especially well-suited for inboxes, calendars, spreadsheets, research, documentation, and repeatable admin tasks that need patience, structure, and attention to detail.",
+  },
+];
+
+const expectations = [
+  {
+    title: "Professional communication",
+    text: "Updates stay clear, respectful, and easy to act on.",
+  },
+  {
+    title: "Organized execution",
+    text: "Tasks are handled with structure, not guesswork.",
+  },
+  {
+    title: "Care with details",
+    text: "Accuracy matters, especially in routine admin work.",
+  },
 ];
 
 const socials = [
-  { label: "WhatsApp", short: "WA", href: "https://wa.me/639241232790", note: "Quickest way to start a client conversation." },
-  { label: "LinkedIn", short: "LI", href: "https://ph.linkedin.com/in/daryll-bonzo-02a0632b0", note: "Professional background and availability." },
-  { label: "Facebook", short: "FB", href: "https://www.facebook.com/daryll.l.bonzo", note: "Alternate direct message channel." },
+  { label: "WhatsApp", short: "WA", href: "https://wa.me/639241232790", note: "Best for quick hiring conversations and project discussions." },
+  { label: "LinkedIn", short: "LI", href: "https://ph.linkedin.com/in/daryll-bonzo-02a0632b0", note: "Professional background, strengths, and profile details." },
+  { label: "Facebook", short: "FB", href: "https://www.facebook.com/daryll.l.bonzo", note: "Easy backup contact for inquiries and follow-ups." },
 ];
+
+function clampValue(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function animatePercent(base, phase, amplitude, min, max) {
+  return clampValue(Math.round(base + Math.sin(phase) * amplitude), min, max);
+}
 
 function CursorGlow() {
   const [cursor, setCursor] = useState({ x: 0, y: 0, hidden: true, down: false });
@@ -103,6 +141,7 @@ function LinkButton({ href, className = "", children }) {
 export default function App() {
   const [progress, setProgress] = useState(0);
   const [active, setActive] = useState(0);
+  const [liveTick, setLiveTick] = useState(0);
 
   useEffect(() => {
     const scroll = () => {
@@ -123,7 +162,20 @@ export default function App() {
     return () => io.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const updateTick = () => setLiveTick(Date.now() / 1000);
+    updateTick();
+    const intervalId = window.setInterval(updateTick, 180);
+    return () => window.clearInterval(intervalId);
+  }, []);
+
   const current = services[active];
+  const liveBars = current.bars.map((bar, index) => animatePercent(bar, liveTick * 1.6 + active * 0.8 + index * 0.95, 3.2, 72, 99));
+  const liveResults = results.map((item, index) => ({
+    ...item,
+    liveLevel: animatePercent(item.level, liveTick * 1.35 + index * 0.9, 4.4, 68, 98),
+  }));
 
   return (
     <>
@@ -160,7 +212,7 @@ export default function App() {
               <span className="tag">Client Operations Board</span>
               <h2>Support flow aligned to General Virtual Assistant work.</h2>
               <div className="panel-grid">
-                <article className="focus"><small>Selected service</small><h3>{current.title}</h3><p>{current.desc}</p>{current.bullets.map((item, index) => <div className="metric" key={item}><div><span>{item}</span><strong>{current.bars[index]}%</strong></div><i><b style={{ width: `${current.bars[index]}%` }} /></i></div>)}</article>
+                <article className="focus"><small>Selected service</small><h3>{current.title}</h3><p>{current.desc}</p>{current.bullets.map((item, index) => <div className="metric" key={item}><div><span>{item}</span><strong>{liveBars[index]}%</strong></div><i><b style={{ width: `${liveBars[index]}%` }} /></i></div>)}</article>
                 <article className="mini"><small>Inbox and follow-ups</small><strong>Priority-based message handling</strong><p>Important requests stay visible instead of getting buried.</p></article>
                 <article className="mini"><small>Scheduling rhythm</small><strong>Cleaner calendar coordination</strong><p>Appointments and reminders are managed with structure.</p></article>
                 <article className="mini"><small>Research and reporting</small><strong>Clear summaries for better decisions</strong><p>Scattered information becomes output a client can act on.</p></article>
@@ -184,21 +236,36 @@ export default function App() {
             </div>
           </section>
 
+          <section className="section" data-reveal id="confidence">
+            <div className="heading"><small>Client Confidence</small><h2>Why a client can still hire me with confidence even while I grow in the VA role</h2><p>I do not need to overclaim experience to be valuable. What matters most to clients is whether the person they hire can learn fast, protect details, stay organized, communicate clearly, and execute consistently. Those strengths are already part of how I work.</p></div>
+            <div className="proof-layout">
+              <div className="proof-grid">{positioning.map((item) => <article className="card proof-card" key={item.title}><small>{item.title}</small><p>{item.text}</p></article>)}</div>
+              <div className="promise-panel">
+                <small>What you can expect from me</small>
+                <h3>Support that feels structured, professional, and easy to trust.</h3>
+                <p>I aim to become the kind of assistant who reduces friction for the client, keeps work organized, and makes day-to-day operations feel lighter instead of heavier.</p>
+                <div className="promise-list">{expectations.map((item) => <div className="promise-item" key={item.title}><strong>{item.title}</strong><p>{item.text}</p></div>)}</div>
+                <LinkButton className="primary" href="https://wa.me/639241232790">Talk about your workflow</LinkButton>
+              </div>
+            </div>
+          </section>
+
           <section className="section" data-reveal id="tools">
             <div className="heading"><small>Tools and Workflow</small><h2>Comfortable with common remote support tools</h2><p>I am comfortable working with tools used in scheduling, communication, spreadsheets, task organization, documentation, and research.</p></div>
             <div className="tool-box">{tools.map((tool) => <span key={tool}>{tool}</span>)}</div>
             <div className="note">My previous role strengthened my ability to work with information-heavy tasks, organize data clearly, build reports, monitor details, and stay accurate under routine workflows. Those habits translate well into high-quality virtual assistance.</div>
-            <div className="result-grid">{results.map((item) => <article className="card result" key={item.title}><small>{item.stat}</small><h3>{item.title}</h3><p>{item.text}</p><i><b style={{ width: item.level }} /></i></article>)}</div>
+            <div className="result-grid">{liveResults.map((item) => <article className="card result" key={item.title}><div className="result-head"><small>{item.stat}</small><strong className="result-percent">{item.liveLevel}%</strong></div><h3>{item.title}</h3><p>{item.text}</p><i><b style={{ width: `${item.liveLevel}%` }} /></i></article>)}</div>
           </section>
 
           <section className="section contact" data-reveal id="connect">
-            <div className="heading"><small>Let's Work Together</small><h2>If you need a reliable General Virtual Assistant, I am ready to help.</h2><p>If you need support with inboxes, calendars, research, reports, spreadsheets, or day-to-day admin tasks, reach out through any of the channels below.</p></div>
+            <div className="heading"><small>Let's Work Together</small><h2>If you need someone who can learn fast, stay organized, and protect the details of your business, I am ready to help.</h2><p>I may still be growing into the General Virtual Assistant title, but I already bring the mindset clients need from day one: structure, professionalism, clear communication, and careful execution. If you want dependable support that can grow with your workflow, reach out through any of the channels below.</p></div>
+            <div className="contact-highlights">{expectations.map((item) => <span key={item.title}>{item.title}</span>)}</div>
             <div className="contact-grid">{socials.map((item) => <a aria-label={item.label} className="card contact-card" href={item.href} key={item.label} rel="noreferrer" target="_blank"><span>{item.short}</span><strong>{item.label}</strong><p>{item.note}</p></a>)}</div>
             <div className="actions"><LinkButton className="primary" href="https://wa.me/639241232790">Message me on WhatsApp</LinkButton><LinkButton className="secondary" href="https://www.facebook.com/daryll.l.bonzo">View Facebook</LinkButton></div>
           </section>
         </main>
 
-        <footer className="footer"><div className="wrap"><div><strong>Daryll John L. Bonzo</strong><small>General Virtual Assistant | Manila, Philippines</small></div><p>Reliable support for admin, research, reporting, and organized remote workflows.</p></div></footer>
+        <footer className="footer"><div className="wrap"><div className="footer-identity"><strong>Daryll John L. Bonzo</strong><small>General Virtual Assistant | Manila, Philippines</small></div><p>Reliable support for admin, research, reporting, and organized remote workflows.</p></div></footer>
       </div>
     </>
   );
