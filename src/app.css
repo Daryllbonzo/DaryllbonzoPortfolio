@@ -1096,14 +1096,78 @@ button, input, textarea, select { font: inherit; }
   50% { background-position: 100% 50%; }
 }
 
+@media (max-width: 1280px) {
+  .hero,
+  .services,
+  .insights,
+  .proof-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-grid,
+  .proof-grid,
+  .result-grid,
+  .contact-grid,
+  .platform-cloud {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: 20px;
+  }
+
+  .preview {
+    position: static;
+  }
+
+  .header .wrap,
+  .footer .wrap {
+    flex-wrap: wrap;
+  }
+
+  .nav {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .actions .button {
+    flex: 1 1 220px;
+  }
+
+  .timezone-bubble {
+    left: 12px;
+    top: auto;
+    bottom: 112px;
+    transform: none;
+    animation-name: timezoneDriftMobile;
+  }
+
+  .timezone-card::before {
+    display: none;
+  }
+
+  .dock {
+    right: 14px;
+    top: auto;
+    bottom: 18px;
+    transform: none;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .dock a {
+    width: 72px;
+    min-height: 68px;
+  }
+}
+
 @media (max-width: 1040px) {
   .hero, .services, .insights, .proof-layout, .panel-grid, .result-grid, .contact-grid { grid-template-columns: 1fr; }
-  .hero { min-height: auto; padding-top: 18px; }
-  .preview { position: static; }
+  .hero { padding-top: 18px; }
   .proof-grid { grid-template-columns: 1fr; }
-  .platform-cloud { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .timezone-bubble { left: 10px; top: auto; bottom: 118px; transform: none; animation-name: timezoneDriftMobile; }
-  .timezone-card::before { display: none; }
   .dock { right: auto; left: 20px; top: auto; bottom: 20px; transform: none; flex-direction: row; }
   .dock a { width: 76px; }
 }
@@ -1113,10 +1177,9 @@ button, input, textarea, select { font: inherit; }
   .cursor-ring, .cursor-core { display: none; }
   .cosmic-layer video { opacity: 0.14; transform: scale(1.22) rotate(180deg); }
   .ambient-lines, .ambient-rings { opacity: 0.55; }
-  .header .wrap, .footer .wrap { flex-wrap: wrap; }
-  .nav { order: 3; width: 100%; justify-content: space-between; }
   .copy h1 { max-width: 100%; }
-  .stats, .service-grid, .strength-grid, .platform-cloud { grid-template-columns: 1fr; }
+  .stats, .service-grid, .strength-grid, .platform-cloud, .proof-grid { grid-template-columns: 1fr; }
+  .actions .button { flex-basis: 100%; }
   .timezone-bubble { left: 10px; right: 14px; bottom: 92px; width: auto; }
   .timezone-avatar { width: 52px; height: 52px; }
   .dock { left: 14px; right: 14px; bottom: 14px; justify-content: center; }
@@ -1125,13 +1188,14 @@ button, input, textarea, select { font: inherit; }
 
 @media (max-width: 560px) {
   .wrap, .page { width: calc(100% - 28px); max-width: 1200px; }
-  .page { padding-bottom: 132px; }
+  .page { padding-bottom: 156px; }
   .panel, .preview, .timeline, .contact-card, .card, .service-card { padding: 20px; }
   .nav { gap: 12px; flex-wrap: wrap; }
   .copy h1 { font-size: clamp(2.7rem, 15vw, 4rem); }
   .heading h2, .panel h2 { font-size: clamp(2rem, 11vw, 3rem); }
   .timezone-bubble { grid-template-columns: 1fr; gap: 10px; left: 10px; right: 10px; bottom: 100px; }
   .timezone-avatar { width: 48px; height: 48px; }
+  .dock a small { font-size: 0.8rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1151,7 +1215,7 @@ button, input, textarea, select { font: inherit; }
 
 @media (min-width: 1700px) {
   .timezone-bubble {
-    left: calc((100vw - 1200px) / 2 - 252px);
+    left: calc((100vw - 1200px) / 2 - 330px);
     top: 58%;
     bottom: auto;
     transform: translateY(-50%);
