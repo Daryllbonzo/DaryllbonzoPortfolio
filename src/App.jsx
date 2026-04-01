@@ -1,392 +1,987 @@
-import { useEffect, useState } from "react";
-import "./app.css";
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap");
 
-const services = [
-  { label: "Inbox control", title: "Email and inbox management", desc: "I organize messages, priorities, and follow-ups so important conversations do not get buried.", bullets: ["Priority filtering", "Reply drafting", "Follow-up reminders"], bars: [92, 86, 80] },
-  { label: "Calendar support", title: "Calendar scheduling and follow-ups", desc: "I keep appointments, reminders, and schedule changes organized so your day runs cleaner.", bullets: ["Time-block setup", "Meeting reminders", "Schedule updates"], bars: [88, 83, 79] },
-  { label: "Data accuracy", title: "Data entry and spreadsheet organization", desc: "I keep tracking sheets clear, structured, and accurate for easier reporting and decisions.", bullets: ["Clean data entry", "Sheet organization", "Consistent formatting"], bars: [94, 89, 84] },
-  { label: "Research support", title: "Online research and lead generation", desc: "I gather useful information and turn it into clear summaries, lists, and lead inputs.", bullets: ["Lead sourcing", "Research summaries", "Actionable findings"], bars: [85, 82, 78] },
-  { label: "Reporting", title: "Document formatting and report creation", desc: "I create polished documents and reports that are easier to scan, review, and share.", bullets: ["Report cleanup", "Document layout", "Readable summaries"], bars: [90, 84, 81] },
-  { label: "Daily operations", title: "Admin support for busy founders and teams", desc: "I handle repeatable admin work so clients can focus on growth, strategy, and relationships.", bullets: ["Task tracking", "Routine admin support", "Consistent execution"], bars: [91, 86, 82] },
-];
-
-const strengths = [
-  { title: "Fast learner", text: "I adapt quickly to new tools, systems, and workflows." },
-  { title: "Attention to detail", text: "My research and data background helps me stay accurate." },
-  { title: "Organized and reliable", text: "I keep work structured, clear, and easy to track." },
-  { title: "Consistent execution", text: "I can handle repetitive admin tasks with focus and care." },
-];
-
-const workflow = [
-  { step: "01", title: "Organize requests", text: "Messages, schedules, files, and tasks are sorted by priority." },
-  { step: "02", title: "Handle recurring work", text: "Admin tasks move through a clean repeatable routine." },
-  { step: "03", title: "Track the details", text: "Sheets, notes, and reports stay structured and visible." },
-  { step: "04", title: "Keep things moving", text: "Clients get more time for strategy and growth." },
-];
-
-const platforms = [
-  { id: "workspace", label: "Google Workspace" },
-  { id: "excel", label: "Microsoft Excel" },
-  { id: "calendar", label: "Google Calendar" },
-  { id: "zoom", label: "Zoom" },
-  { id: "slack", label: "Slack" },
-  { id: "notion", label: "Notion" },
-  { id: "canva", label: "Canva" },
-  { id: "docs", label: "Google Docs" },
-  { id: "gmail", label: "Gmail" },
-];
-
-const supportSignals = [
-  { title: "Inbox clarity", stat: "Priority handling", text: "Important conversations stay visible, cleaner to sort, and easier to follow through.", level: 88 },
-  { title: "Schedule control", stat: "Daily coordination", text: "Appointments, reminders, and timing changes stay more structured across the day.", level: 84 },
-  { title: "Research readiness", stat: "Decision support", text: "Scattered information becomes cleaner notes, summaries, and action-friendly references.", level: 91 },
-];
-
-const positioning = [
-  {
-    title: "Transferable strengths clients can use now",
-    text: "Even while I continue growing under the General Virtual Assistant title, I already bring the habits clients actually pay for: organization, research discipline, data accuracy, reporting, responsiveness, and dependable follow-through.",
-  },
-  {
-    title: "Fast onboarding with clear instructions",
-    text: "Give me your preferred tools, process, and priorities, and I can adapt quickly without adding unnecessary confusion, missed details, or rework.",
-  },
-  {
-    title: "Reliable support for recurring operations",
-    text: "I am especially well-suited for inboxes, calendars, spreadsheets, research, documentation, and repeatable admin tasks that need patience, structure, and attention to detail.",
-  },
-];
-
-const expectations = [
-  {
-    title: "Calm communication",
-    text: "Updates stay clear, respectful, and easy to act on.",
-  },
-  {
-    title: "Organized execution",
-    text: "Tasks are handled with structure, not guesswork.",
-  },
-  {
-    title: "Reliable follow-through",
-    text: "The details stay protected, especially in routine admin work.",
-  },
-];
-
-const socials = [
-  { label: "WhatsApp", short: "WA", href: "https://wa.me/639241232790", note: "Best for quick hiring conversations and project discussions." },
-  { label: "LinkedIn", short: "LI", href: "https://ph.linkedin.com/in/daryll-bonzo-02a0632b0", note: "Professional background, strengths, and profile details." },
-  { label: "Facebook", short: "FB", href: "https://www.facebook.com/daryll.l.bonzo", note: "Easy backup contact for inquiries and follow-ups." },
-];
-
-function clampValue(value, min, max) {
-  return Math.min(max, Math.max(min, value));
+:root {
+  --bg: #071018;
+  --bg-soft: rgba(8, 17, 25, 0.8);
+  --panel: rgba(10, 24, 35, 0.88);
+  --line: rgba(141, 235, 217, 0.14);
+  --text: #eef9f5;
+  --muted: #96b0ad;
+  --primary: #8debd9;
+  --primary-strong: #41d0b3;
+  --accent: #f6b37a;
+  --accent-strong: #ff8f63;
+  --pointer-x: 50vw;
+  --pointer-y: 20vh;
 }
 
-function animatePercent(base, phase, amplitude, min, max) {
-  return clampValue(Math.round(base + Math.sin(phase) * amplitude), min, max);
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-width: 320px;
+  position: relative;
+  background:
+    radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(141, 235, 217, 0.12), transparent 18%),
+    radial-gradient(circle at 14% 18%, rgba(246, 179, 122, 0.14), transparent 22%),
+    radial-gradient(circle at 84% 12%, rgba(141, 235, 217, 0.12), transparent 24%),
+    linear-gradient(180deg, #071018 0%, #0b1520 46%, #061019 100%);
+  color: var(--text);
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  cursor: none;
+  overflow-x: hidden;
 }
 
-function CursorGlow() {
-  const [cursor, setCursor] = useState({ x: 0, y: 0, hidden: true, down: false });
-
-  useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return undefined;
-    let frame = 0;
-    const next = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    const paint = () => {
-      setCursor((current) => ({ ...current, x: next.x, y: next.y, hidden: false }));
-      frame = 0;
-    };
-    const move = (event) => {
-      next.x = event.clientX;
-      next.y = event.clientY;
-      document.documentElement.style.setProperty("--pointer-x", `${event.clientX}px`);
-      document.documentElement.style.setProperty("--pointer-y", `${event.clientY}px`);
-      if (!frame) frame = window.requestAnimationFrame(paint);
-    };
-    const leave = () => setCursor((current) => ({ ...current, hidden: true, down: false }));
-    const down = () => setCursor((current) => ({ ...current, down: true, hidden: false }));
-    const up = () => setCursor((current) => ({ ...current, down: false }));
-    window.addEventListener("mousemove", move, { passive: true });
-    window.addEventListener("mousedown", down);
-    window.addEventListener("mouseup", up);
-    document.documentElement.addEventListener("mouseleave", leave);
-    return () => {
-      window.removeEventListener("mousemove", move);
-      window.removeEventListener("mousedown", down);
-      window.removeEventListener("mouseup", up);
-      document.documentElement.removeEventListener("mouseleave", leave);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, []);
-
-  const style = { "--cursor-x": `${cursor.x}px`, "--cursor-y": `${cursor.y}px` };
-  return (
-    <>
-      <div className={`cursor-ring${cursor.hidden ? " is-hidden" : ""}${cursor.down ? " is-down" : ""}`} style={style} />
-      <div className={`cursor-core${cursor.hidden ? " is-hidden" : ""}${cursor.down ? " is-down" : ""}`} style={style} />
-    </>
-  );
+body::before {
+  content: "";
+  position: fixed;
+  inset: -12% -10%;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(246, 179, 122, 0.12), transparent 22%),
+    radial-gradient(circle at 76% 18%, rgba(141, 235, 217, 0.15), transparent 24%),
+    radial-gradient(circle at 52% 82%, rgba(106, 148, 255, 0.08), transparent 20%);
+  filter: blur(22px);
+  opacity: 0.92;
+  animation: auraShift 18s ease-in-out infinite alternate;
 }
 
-function LinkButton({ href, className = "", children }) {
-  const [ripples, setRipples] = useState([]);
-  const external = href && !href.startsWith("#") && !href.startsWith("/");
-  const onClick = (event) => {
-    const box = event.currentTarget.getBoundingClientRect();
-    const size = Math.max(box.width, box.height);
-    const item = { id: `${Date.now()}-${Math.random()}`, x: event.clientX - box.left - size / 2, y: event.clientY - box.top - size / 2, size };
-    setRipples((current) => [...current, item]);
-    window.setTimeout(() => setRipples((current) => current.filter((ripple) => ripple.id !== item.id)), 650);
-  };
+a { color: inherit; text-decoration: none; }
+button, input, textarea, select { font: inherit; }
 
-  return (
-    <a className={`button ${className}`.trim()} href={href} onClick={onClick} rel={external ? "noreferrer" : undefined} target={external ? "_blank" : undefined}>
-      <span>{children}</span>
-      {ripples.map((ripple) => <i className="ripple" key={ripple.id} style={{ width: ripple.size, height: ripple.size, left: ripple.x, top: ripple.y }} />)}
-    </a>
-  );
+.shell { position: relative; min-height: 100vh; overflow: hidden; isolation: isolate; }
+.wrap, .page { width: min(1200px, calc(100% - 40px)); margin: 0 auto; }
+.page { position: relative; z-index: 2; padding: 44px 0 120px; }
+
+.cosmic-layer,
+.cosmic-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
 }
 
-function PlatformIcon({ id }) {
-  switch (id) {
-    case "workspace":
-      return (
-        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
-          <rect x="8" y="18" width="14" height="28" rx="7" fill="#34A853" />
-          <rect x="22" y="10" width="14" height="44" rx="7" fill="#4285F4" opacity="0.96" />
-          <rect x="28" y="22" width="14" height="22" rx="7" fill="#FBBC05" />
-          <rect x="42" y="18" width="14" height="28" rx="7" fill="#EA4335" />
-        </svg>
-      );
-    case "excel":
-      return (
-        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
-          <path d="M18 12h22a6 6 0 0 1 6 6v28a6 6 0 0 1-6 6H18z" fill="#107C41" />
-          <path d="M40 12h6a6 6 0 0 1 6 6v28a6 6 0 0 1-6 6h-6z" fill="#21A366" />
-          <rect x="10" y="18" width="22" height="28" rx="4" fill="#185C37" />
-          <path d="m16 26 5 6-5 6h4.8l2.7-3.8 2.7 3.8H31l-5.2-6 5-6h-4.7l-2.5 3.5-2.4-3.5z" fill="#fff" />
-        </svg>
-      );
-    case "calendar":
-      return (
-        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
-          <rect x="10" y="14" width="44" height="40" rx="10" fill="#fff" />
-          <path d="M10 24a10 10 0 0 1 10-10h24a10 10 0 0 1 10 10v4H10z" fill="#4285F4" />
-          <rect x="18" y="10" width="4" height="10" rx="2" fill="#4285F4" />
-          <rect x="42" y="10" width="4" height="10" rx="2" fill="#4285F4" />
-          <path d="M24 43V30h5.5l2.4 3.4 2.4-3.4H40v13h-4.5v-6.7l-3.5 4.8-3.5-4.8V43z" fill="#34A853" />
-        </svg>
-      );
-    case "zoom":
-      return (
-        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
-          <rect x="10" y="18" width="32" height="28" rx="12" fill="#2D8CFF" />
-          <path d="M42 26.5 54 21v22l-12-5.5a4 4 0 0 1-2-3.5v-4a4 4 0 0 1 2-3.5Z" fill="#54A5FF" />
-        </svg>
-      );
-    case "slack":
-      return (
-        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
-          <rect x="14" y="8" width="10" height="24" rx="5" fill="#36C5F0" />
-          <rect x="20" y="14" width="24" height="10" rx="5" fill="#2EB67D" />
-          <rect x="40" y="14" width="10" height="24" rx="5" fill="#ECB22E" />
-          <rect x="14" y="40" width="24" height="10" rx="5" fill="#E01E5A" />
-        </svg>
-      );
-    case "notion":
-      return (
-        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
-          <rect x="12" y="12" width="40" height="40" rx="8" fill="#fff" />
-          <rect x="12" y="12" width="40" height="40" rx="8" fill="none" stroke="#111" strokeWidth="4" />
-          <path d="M23 42V22h4.5l13.5 12.8V22H46v20h-4L28 28.6V42z" fill="#111" />
-        </svg>
-      );
-    case "canva":
-      return (
-        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
-          <defs>
-            <linearGradient id="canvaGlow" x1="0%" x2="100%" y1="0%" y2="100%">
-              <stop offset="0%" stopColor="#5B6CFF" />
-              <stop offset="100%" stopColor="#00C4CC" />
-            </linearGradient>
-          </defs>
-          <circle cx="32" cy="32" r="22" fill="url(#canvaGlow)" />
-          <path d="M39.2 40.3c-1.8 2.1-4.4 3.2-7.2 3.2-5.9 0-10.3-4.3-10.3-10.7S26.1 22 32 22c2.8 0 5.2.8 7.1 2.5l-2.6 3.1c-1.1-1-2.6-1.6-4.3-1.6-3.4 0-5.8 2.8-5.8 6.7s2.3 6.8 5.8 6.8c1.8 0 3.3-.7 4.4-1.9z" fill="#fff" />
-        </svg>
-      );
-    case "docs":
-      return (
-        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
-          <path d="M20 10h18l10 10v30a4 4 0 0 1-4 4H20a4 4 0 0 1-4-4V14a4 4 0 0 1 4-4Z" fill="#4285F4" />
-          <path d="M38 10v10h10z" fill="#AECBFA" />
-          <rect x="24" y="28" width="16" height="3.5" rx="1.75" fill="#fff" />
-          <rect x="24" y="35" width="16" height="3.5" rx="1.75" fill="#fff" />
-          <rect x="24" y="42" width="12" height="3.5" rx="1.75" fill="#fff" />
-        </svg>
-      );
-    case "gmail":
-      return (
-        <svg aria-hidden="true" className="platform-logo" viewBox="0 0 64 64">
-          <rect x="10" y="16" width="44" height="32" rx="8" fill="#fff" />
-          <path d="M16 22 32 34 48 22" fill="none" stroke="#EA4335" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M16 44V24l8 6v14z" fill="#34A853" />
-          <path d="M48 44V24l-8 6v14z" fill="#4285F4" />
-          <path d="M16 22h4l12 9.2L44 22h4" fill="#FBBC05" />
-        </svg>
-      );
-    default:
-      return null;
+.cosmic-layer {
+  z-index: 0;
+  overflow: hidden;
+}
+
+.cosmic-layer video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.2;
+  filter: saturate(0.9) hue-rotate(-10deg) brightness(0.48);
+  transform: scale(1.18) rotate(180deg);
+  animation: cosmos 26s ease-in-out infinite alternate;
+}
+
+.cosmic-vignette {
+  z-index: 0;
+  background:
+    radial-gradient(circle at 50% 18%, transparent, rgba(7, 16, 24, 0.2) 34%, rgba(7, 16, 24, 0.9) 100%),
+    linear-gradient(180deg, rgba(3, 8, 15, 0.12), rgba(3, 8, 15, 0.52));
+}
+
+.bg-grid, .bg-grid::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(141, 235, 217, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(141, 235, 217, 0.05) 1px, transparent 1px);
+  background-size: 68px 68px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9), transparent 88%);
+  animation: gridFloat 24s linear infinite;
+}
+
+.bg-grid::before {
+  content: "";
+  background:
+    linear-gradient(90deg, transparent, rgba(141, 235, 217, 0.14), transparent),
+    linear-gradient(90deg, transparent, rgba(246, 179, 122, 0.08), transparent);
+  filter: blur(1px);
+  animation: scan 12s linear infinite;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(26px);
+  pointer-events: none;
+  animation: float 14s ease-in-out infinite;
+}
+
+.orb-a { top: 8rem; right: 7%; width: 19rem; height: 19rem; background: rgba(141, 235, 217, 0.16); }
+.orb-b { top: 36rem; left: -5rem; width: 16rem; height: 16rem; background: rgba(246, 179, 122, 0.12); animation-duration: 17s; }
+.orb-c { bottom: 18rem; right: 18%; width: 12rem; height: 12rem; background: rgba(82, 146, 255, 0.12); animation-duration: 11s; }
+
+.ambient-lines,
+.ambient-rings {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ambient-lines span {
+  position: absolute;
+  display: block;
+  width: 36vw;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(141, 235, 217, 0.28), rgba(246, 179, 122, 0.16), transparent);
+  opacity: 0.48;
+  filter: blur(0.4px);
+  animation: trace 16s linear infinite;
+}
+
+.ambient-lines span:nth-child(1) { top: 17%; left: -8%; --line-angle: 14deg; }
+.ambient-lines span:nth-child(2) { top: 47%; right: -10%; --line-angle: -18deg; animation-duration: 19s; animation-delay: -5s; }
+.ambient-lines span:nth-child(3) { bottom: 15%; left: 18%; width: 26vw; --line-angle: 8deg; animation-duration: 13s; animation-delay: -3s; }
+
+.ambient-rings span {
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+  border: 1px solid rgba(141, 235, 217, 0.12);
+  box-shadow: inset 0 0 24px rgba(141, 235, 217, 0.04);
+  animation: ringOrbit 18s ease-in-out infinite;
+}
+
+.ambient-rings span:first-child {
+  top: 18%;
+  right: -7rem;
+  width: 20rem;
+  height: 20rem;
+}
+
+.ambient-rings span:last-child {
+  bottom: 10%;
+  left: -8rem;
+  width: 26rem;
+  height: 26rem;
+  border-color: rgba(246, 179, 122, 0.1);
+  animation-duration: 22s;
+  animation-delay: -8s;
+}
+
+.progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--accent-strong), var(--accent), var(--primary));
+  box-shadow: 0 0 28px rgba(141, 235, 217, 0.44);
+}
+
+.cursor-ring, .cursor-core {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 70;
+  mix-blend-mode: screen;
+  transition: opacity 0.28s ease;
+}
+
+.cursor-ring {
+  width: 68px;
+  height: 68px;
+  margin-left: -34px;
+  margin-top: -34px;
+  border-radius: 999px;
+  border: 1px solid rgba(141, 235, 217, 0.46);
+  box-shadow: 0 0 0 1px rgba(246, 179, 122, 0.08) inset, 0 0 32px rgba(141, 235, 217, 0.22);
+  transform: translate(var(--cursor-x), var(--cursor-y)) scale(1);
+  animation: cursorBloom 2.6s ease-in-out infinite;
+}
+
+.cursor-ring::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border-radius: inherit;
+  border: 1px solid rgba(246, 179, 122, 0.28);
+  opacity: 0.7;
+}
+
+.cursor-core {
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  margin-top: -7px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 251, 246, 0.98) 0%, rgba(246, 179, 122, 0.92) 30%, rgba(141, 235, 217, 0.9) 68%, transparent 100%);
+  box-shadow: 0 0 26px rgba(141, 235, 217, 0.62), 0 0 12px rgba(246, 179, 122, 0.42);
+  transform: translate(var(--cursor-x), var(--cursor-y)) scale(1);
+}
+
+.cursor-ring.is-down { transform: translate(var(--cursor-x), var(--cursor-y)) scale(0.86); }
+.cursor-core.is-down { transform: translate(var(--cursor-x), var(--cursor-y)) scale(1.35); }
+.cursor-ring.is-hidden, .cursor-core.is-hidden { opacity: 0; }
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(18px);
+  background: rgba(6, 13, 20, 0.56);
+  border-bottom: 1px solid rgba(141, 235, 217, 0.08);
+}
+
+.header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 0;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand b,
+.dock a span,
+.contact-card span {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(246, 179, 122, 0.22), rgba(141, 235, 217, 0.14));
+  border: 1px solid rgba(141, 235, 217, 0.18);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 22px rgba(141, 235, 217, 0.08);
+}
+
+.brand span { display: flex; flex-direction: column; gap: 4px; }
+.brand span small, .footer small, .nav a, .dock a small { color: var(--muted); }
+
+.nav { display: inline-flex; align-items: center; gap: 22px; }
+.nav a { position: relative; transition: color 0.2s ease; }
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--primary), transparent);
+  transform: scaleX(0);
+  transition: transform 0.24s ease;
+}
+.nav a:hover { color: var(--text); }
+.nav a:hover::after { transform: scaleX(1); }
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(141, 235, 217, 0.16);
+  background: rgba(8, 18, 27, 0.72);
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.button::before,
+.button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.button::before {
+  background: linear-gradient(115deg, transparent 18%, rgba(255, 255, 255, 0.24) 46%, transparent 72%);
+  transform: translateX(-130%);
+  transition: transform 0.85s ease;
+  z-index: 0;
+}
+
+.button::after {
+  inset: 1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 54%);
+  opacity: 0.65;
+  z-index: 0;
+}
+
+.button span, .ripple { position: relative; z-index: 1; }
+.button span { font-weight: 800; }
+.button:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 24px 54px rgba(0, 0, 0, 0.3), 0 0 30px rgba(141, 235, 217, 0.16); }
+.button:hover::before { transform: translateX(130%); }
+.button:active { transform: translateY(0) scale(0.98); }
+.button.primary, .button.compact { color: #061117; border-color: transparent; background: linear-gradient(135deg, var(--accent-strong), var(--accent) 32%, var(--primary) 100%); }
+.button.secondary { background: rgba(6, 15, 23, 0.48); color: var(--text); }
+
+.ripple {
+  position: absolute;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.02));
+  transform: scale(0);
+  animation: ripple 0.65s ease-out forwards;
+}
+
+.dock {
+  position: fixed;
+  right: 22px;
+  top: 50%;
+  z-index: 28;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transform: translateY(-50%);
+}
+
+.dock a {
+  width: 74px;
+  min-height: 74px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 22px;
+  background: rgba(8, 18, 27, 0.72);
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.2);
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.dock a:hover { transform: translateX(-4px); border-color: rgba(141, 235, 217, 0.28); box-shadow: 0 20px 42px rgba(0, 0, 0, 0.28), 0 0 28px rgba(141, 235, 217, 0.12); }
+
+.hero, .services, .insights, .proof-layout {
+  display: grid;
+  grid-template-columns: 1.02fr 0.98fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.hero {
+  min-height: calc(100vh - 106px);
+  align-items: center;
+  padding: 26px 0 40px;
+}
+
+.copy h1, .heading h2, .panel h2, .preview h3, .focus h3, .result h3 {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.badges, .actions, .chips, .preview-tags, .contact-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.badges em, .heading small, .tag, .service-card small, .card small, .preview small, .focus small, .mini small, .result small {
+  display: inline-flex;
+  width: fit-content;
+  padding: 10px 14px;
+  border-radius: 999px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.badges em, .heading small, .tag, .service-card small, .card small, .preview small, .focus small, .mini small, .result small {
+  background: linear-gradient(135deg, rgba(141, 235, 217, 0.14), rgba(141, 235, 217, 0.08));
+  color: #dffef4;
+  border: 1px solid rgba(141, 235, 217, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.badges .warm { background: linear-gradient(135deg, rgba(246, 179, 122, 0.16), rgba(246, 179, 122, 0.08)); color: #ffe4c9; border-color: rgba(246, 179, 122, 0.18); }
+.copy h1 { margin: 22px 0 18px; max-width: 10.5ch; font-size: clamp(3.4rem, 8vw, 6.2rem); line-height: 0.94; }
+.copy p, .heading p, .panel p, .preview p, .card p, .timeline .step p, .contact-card p { margin: 0; color: var(--muted); line-height: 1.8; }
+.gradient-word {
+  display: inline-block;
+  background: linear-gradient(120deg, #ffd4b2 0%, var(--accent) 22%, var(--primary) 72%, #f8fffd 100%);
+  background-size: 180% 180%;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: textShimmer 9s ease-in-out infinite;
+}
+
+.hero-callout {
+  width: fit-content;
+  margin-top: 18px;
+  padding: 13px 17px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent),
+    rgba(8, 18, 27, 0.62);
+  border: 1px solid rgba(141, 235, 217, 0.14);
+  color: #dcfff4;
+  line-height: 1.7;
+  box-shadow: inset 0 -10px 22px rgba(141, 235, 217, 0.05), 0 14px 40px rgba(0, 0, 0, 0.16);
+}
+.actions, .chips { margin-top: 28px; }
+.chips span, .preview-tags span {
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: rgba(8, 18, 27, 0.56);
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.chips span,
+.contact-highlights span {
+  animation: chipFloat 7.5s ease-in-out infinite;
+}
+
+.chips span:nth-child(2),
+.contact-highlights span:nth-child(2) {
+  animation-delay: -1.8s;
+}
+
+.chips span:nth-child(3),
+.contact-highlights span:nth-child(3) {
+  animation-delay: -3.3s;
+}
+
+.chips span:nth-child(4) {
+  animation-delay: -4.6s;
+}
+
+.stats, .panel-grid, .strength-grid, .result-grid, .contact-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.stats { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 32px; }
+.stats article, .panel, .service-card, .preview, .card, .timeline, .contact-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(10, 24, 35, 0.92), rgba(7, 16, 24, 0.9));
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(14px);
+}
+
+.stats article::before,
+.service-card::before,
+.preview::before,
+.card::before,
+.timeline::before,
+.contact-card::before,
+.focus::before,
+.mini::before {
+  content: "";
+  position: absolute;
+  width: 14rem;
+  height: 14rem;
+  top: -8rem;
+  right: -5rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(141, 235, 217, 0.16), transparent 68%);
+  opacity: 0.72;
+  pointer-events: none;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.service-card:hover::before,
+.contact-card:hover::before,
+.preview:hover::before,
+.card:hover::before,
+.stats article:hover::before {
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+.stats article, .service-card, .card, .contact-card { padding: 22px; }
+.stats article strong { display: block; margin-bottom: 8px; }
+
+.panel {
+  position: relative;
+  padding: 24px;
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: 0 34px 80px rgba(0, 0, 0, 0.38), 0 0 48px rgba(141, 235, 217, 0.09);
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 18%), radial-gradient(circle at 82% 14%, rgba(141, 235, 217, 0.14), transparent 18%);
+  pointer-events: none;
+}
+
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: auto -6rem -8rem auto;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 999px;
+  border: 1px solid rgba(246, 179, 122, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(141, 235, 217, 0.06);
+  opacity: 0.7;
+  animation: ringOrbit 16s ease-in-out infinite;
+}
+
+.panel h2 { margin: 18px 0 20px; max-width: 14ch; font-size: clamp(1.7rem, 3vw, 2.35rem); line-height: 1.02; }
+.panel-grid { position: relative; z-index: 1; grid-template-columns: 1.08fr 0.92fr; }
+
+.focus, .mini, .preview, .timeline {
+  padding: 22px;
+  background: rgba(8, 18, 27, 0.48);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+}
+
+.focus { grid-row: span 3; }
+.focus h3, .preview h3 { margin: 16px 0 12px; font-size: clamp(1.9rem, 4vw, 2.7rem); line-height: 1.02; }
+.mini strong, .service-card strong, .timeline .step strong, .contact-card strong { display: block; margin: 14px 0 10px; }
+
+.metric { display: grid; gap: 8px; margin-top: 16px; }
+.metric div { display: flex; justify-content: space-between; gap: 10px; }
+.metric strong,
+.result-percent {
+  color: #ddfff5;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 18px rgba(141, 235, 217, 0.16);
+}
+
+.metric strong {
+  min-width: 58px;
+  text-align: right;
+}
+
+.metric i, .result i {
+  width: 100%;
+  height: 10px;
+  display: block;
+  border-radius: 999px;
+  background: rgba(141, 235, 217, 0.08);
+  overflow: hidden;
+}
+
+.metric b, .result b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-strong), var(--accent), var(--primary));
+  box-shadow: 0 0 20px rgba(141, 235, 217, 0.26);
+  transition: width 0.6s ease, box-shadow 0.35s ease;
+}
+
+.section { padding-top: 110px; scroll-margin-top: 120px; }
+.heading { max-width: 48rem; margin-bottom: 30px; }
+.heading h2 { margin: 18px 0 14px; font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1; }
+
+.service-grid, .strength-grid, .result-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.service-card {
+  text-align: left;
+  color: var(--text);
+  background: rgba(8, 18, 27, 0.66);
+  cursor: pointer;
+  transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.service-card:hover, .service-card.active, .contact-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(141, 235, 217, 0.28);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.26), 0 0 28px rgba(141, 235, 217, 0.12);
+}
+
+.service-card.active {
+  animation: selectedPulse 2.8s ease-in-out infinite;
+}
+
+.preview {
+  position: sticky;
+  top: 110px;
+  display: grid;
+  gap: 18px;
+}
+
+.insights { align-items: start; }
+.timeline { display: grid; gap: 18px; }
+.timeline .step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.timeline .step b {
+  display: inline-flex;
+  width: 52px;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(246, 179, 122, 0.24), rgba(141, 235, 217, 0.14));
+  border: 1px solid rgba(141, 235, 217, 0.16);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.platform-cloud {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.platform-chip {
+  position: relative;
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 24%),
+    linear-gradient(180deg, rgba(10, 24, 35, 0.94), rgba(8, 18, 27, 0.88));
+  border: 1px solid rgba(141, 235, 217, 0.12);
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  translate: 0 0;
+  animation: platformFloat var(--float-duration, 8s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+  transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+}
+
+.platform-chip::before,
+.platform-chip::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.platform-chip::before {
+  inset: auto -3.4rem -3.8rem auto;
+  width: 9rem;
+  height: 9rem;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(141, 235, 217, 0.16), transparent 70%);
+  opacity: 0.82;
+}
+
+.platform-chip::after {
+  inset: 1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.platform-chip:hover {
+  translate: 0 -8px;
+  transform: scale(1.015);
+  border-color: rgba(141, 235, 217, 0.24);
+  box-shadow: 0 28px 66px rgba(0, 0, 0, 0.32), 0 0 32px rgba(141, 235, 217, 0.1);
+}
+
+.platform-chip strong {
+  position: relative;
+  z-index: 1;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.platform-mark {
+  position: relative;
+  z-index: 1;
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 14px 28px rgba(0, 0, 0, 0.22);
+}
+
+.platform-logo {
+  width: 42px;
+  height: 42px;
+  display: block;
+}
+
+.platform-chip.is-workspace .platform-mark { background: linear-gradient(135deg, rgba(66, 133, 244, 0.16), rgba(52, 168, 83, 0.1)); }
+.platform-chip.is-excel .platform-mark { background: linear-gradient(135deg, rgba(33, 163, 102, 0.18), rgba(16, 124, 65, 0.12)); }
+.platform-chip.is-calendar .platform-mark { background: linear-gradient(135deg, rgba(66, 133, 244, 0.16), rgba(255, 255, 255, 0.08)); }
+.platform-chip.is-zoom .platform-mark { background: linear-gradient(135deg, rgba(45, 140, 255, 0.2), rgba(84, 165, 255, 0.12)); }
+.platform-chip.is-slack .platform-mark { background: linear-gradient(135deg, rgba(224, 30, 90, 0.14), rgba(54, 197, 240, 0.12)); }
+.platform-chip.is-notion .platform-mark { background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(180, 190, 194, 0.08)); }
+.platform-chip.is-canva .platform-mark { background: linear-gradient(135deg, rgba(91, 108, 255, 0.18), rgba(0, 196, 204, 0.14)); }
+.platform-chip.is-docs .platform-mark { background: linear-gradient(135deg, rgba(66, 133, 244, 0.18), rgba(174, 203, 250, 0.12)); }
+.platform-chip.is-gmail .platform-mark { background: linear-gradient(135deg, rgba(234, 67, 53, 0.16), rgba(66, 133, 244, 0.12)); }
+
+.note {
+  margin-top: 20px;
+  padding: 22px 24px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(10, 24, 35, 0.94), rgba(8, 18, 27, 0.9));
+  border: 1px solid rgba(141, 235, 217, 0.14);
+  color: var(--muted);
+  line-height: 1.82;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.38);
+}
+
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.proof-card,
+.promise-panel {
+  background: linear-gradient(180deg, rgba(10, 24, 35, 0.92), rgba(8, 18, 27, 0.9));
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(14px);
+}
+
+.proof-card {
+  padding: 22px;
+}
+
+.promise-panel {
+  display: grid;
+  gap: 18px;
+  padding: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(141, 235, 217, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(10, 24, 35, 0.94), rgba(8, 18, 27, 0.92));
+}
+
+.promise-panel h3 {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  line-height: 1.04;
+}
+
+.promise-list {
+  display: grid;
+  gap: 14px;
+}
+
+.promise-item {
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(141, 235, 217, 0.1);
+}
+
+.promise-item strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.result-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 20px; }
+.result-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.result-percent {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.05rem;
+  line-height: 1;
+  min-width: 58px;
+  text-align: right;
+}
+
+.result h3 { margin-top: 16px; font-size: 1.5rem; line-height: 1.1; }
+.result i { margin-top: 20px; height: 12px; }
+
+.contact { padding-bottom: 20px; }
+.contact-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 24px;
+}
+
+.contact-highlights span {
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(246, 179, 122, 0.14), rgba(141, 235, 217, 0.12));
+  border: 1px solid rgba(141, 235, 217, 0.18);
+  color: #ddfff4;
+  letter-spacing: 0.04em;
+}
+
+.contact-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 24px; }
+.contact-card { display: flex; flex-direction: column; gap: 12px; transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease; }
+
+.footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(141, 235, 217, 0.08);
+  background: rgba(5, 12, 19, 0.66);
+}
+
+.footer .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px 0 40px;
+}
+
+.footer-identity {
+  display: grid;
+  gap: 8px;
+  min-width: 260px;
+}
+
+.footer-identity strong,
+.footer-identity small {
+  display: block;
+}
+
+.footer p, .footer small { color: var(--muted); }
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(42px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+[data-reveal].is-visible { opacity: 1; transform: translateY(0); }
+
+@keyframes ripple {
+  from { opacity: 0.72; transform: scale(0); }
+  to { opacity: 0; transform: scale(3.4); }
+}
+
+@keyframes auraShift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(0, -1.6rem, 0) scale(1.04); }
+}
+
+@keyframes cosmos {
+  0% { transform: scale(1.16) rotate(180deg) translate3d(0, 0, 0); }
+  100% { transform: scale(1.24) rotate(184deg) translate3d(-1.5%, 1.2%, 0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -24px, 0); }
+}
+
+@keyframes gridFloat {
+  0% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-10px, 12px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes scan {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+@keyframes trace {
+  0% { transform: translateX(-18%) rotate(var(--line-angle, 0deg)); opacity: 0; }
+  15% { opacity: 0.42; }
+  85% { opacity: 0.42; }
+  100% { transform: translateX(18%) rotate(var(--line-angle, 0deg)); opacity: 0; }
+}
+
+@keyframes ringOrbit {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.54; }
+  50% { transform: scale(1.08) rotate(6deg); opacity: 0.82; }
+}
+
+@keyframes cursorBloom {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(246, 179, 122, 0.08) inset, 0 0 32px rgba(141, 235, 217, 0.22); }
+  50% { box-shadow: 0 0 0 1px rgba(246, 179, 122, 0.18) inset, 0 0 40px rgba(141, 235, 217, 0.34); }
+}
+
+@keyframes platformFloat {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -7px; }
+}
+
+@keyframes chipFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -4px, 0); }
+}
+
+@keyframes selectedPulse {
+  0%, 100% { box-shadow: 0 18px 42px rgba(0, 0, 0, 0.26), 0 0 28px rgba(141, 235, 217, 0.12); }
+  50% { box-shadow: 0 20px 46px rgba(0, 0, 0, 0.28), 0 0 34px rgba(141, 235, 217, 0.18); }
+}
+
+@keyframes textShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@media (max-width: 1040px) {
+  .hero, .services, .insights, .proof-layout, .panel-grid, .result-grid, .contact-grid { grid-template-columns: 1fr; }
+  .hero { min-height: auto; padding-top: 18px; }
+  .preview { position: static; }
+  .proof-grid { grid-template-columns: 1fr; }
+  .platform-cloud { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dock { right: auto; left: 20px; top: auto; bottom: 20px; transform: none; flex-direction: row; }
+  .dock a { width: 76px; }
+}
+
+@media (max-width: 820px) {
+  body { cursor: auto; }
+  .cursor-ring, .cursor-core { display: none; }
+  .cosmic-layer video { opacity: 0.14; transform: scale(1.22) rotate(180deg); }
+  .ambient-lines, .ambient-rings { opacity: 0.55; }
+  .header .wrap, .footer .wrap { flex-wrap: wrap; }
+  .nav { order: 3; width: 100%; justify-content: space-between; }
+  .copy h1 { max-width: 100%; }
+  .stats, .service-grid, .strength-grid, .platform-cloud { grid-template-columns: 1fr; }
+  .dock { left: 14px; right: 14px; bottom: 14px; justify-content: center; }
+  .dock a { flex: 1; width: auto; min-height: 64px; }
+}
+
+@media (max-width: 560px) {
+  .wrap, .page { width: min(100% - 28px, 1200px); }
+  .page { padding-bottom: 132px; }
+  .panel, .preview, .timeline, .contact-card, .card, .service-card { padding: 20px; }
+  .nav { gap: 12px; flex-wrap: wrap; }
+  .copy h1 { font-size: clamp(2.7rem, 15vw, 4rem); }
+  .heading h2, .panel h2 { font-size: clamp(2rem, 11vw, 3rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-}
-
-export default function App() {
-  const [progress, setProgress] = useState(0);
-  const [active, setActive] = useState(0);
-  const [liveTick, setLiveTick] = useState(0);
-
-  useEffect(() => {
-    const scroll = () => {
-      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      setProgress(window.scrollY / max);
-    };
-    scroll();
-    window.addEventListener("scroll", scroll, { passive: true });
-    return () => window.removeEventListener("scroll", scroll);
-  }, []);
-
-  useEffect(() => {
-    const nodes = [...document.querySelectorAll("[data-reveal]")];
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible"));
-    }, { threshold: 0.18, rootMargin: "0px 0px -64px 0px" });
-    nodes.forEach((node) => io.observe(node));
-    return () => io.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
-    const updateTick = () => setLiveTick(Date.now() / 1000);
-    updateTick();
-    const intervalId = window.setInterval(updateTick, 180);
-    return () => window.clearInterval(intervalId);
-  }, []);
-
-  const current = services[active];
-  const liveBars = current.bars.map((bar, index) => animatePercent(bar, liveTick * 1.6 + active * 0.8 + index * 0.95, 3.2, 72, 99));
-  const liveSignals = supportSignals.map((item, index) => ({
-    ...item,
-    liveLevel: animatePercent(item.level, liveTick * 1.35 + index * 0.9, 4.4, 68, 98),
-  }));
-
-  return (
-    <>
-      <CursorGlow />
-      <div className="shell">
-        <div className="progress"><span style={{ transform: `scaleX(${progress})` }} /></div>
-        <div className="cosmic-layer" aria-hidden="true">
-          <video autoPlay loop muted playsInline preload="metadata">
-            <source src="/videos/blackhole.webm" type="video/webm" />
-          </video>
-        </div>
-        <div className="cosmic-vignette" />
-        <div className="bg-grid" />
-        <div className="orb orb-a" />
-        <div className="orb orb-b" />
-        <div className="orb orb-c" />
-        <div className="ambient-lines" aria-hidden="true"><span /><span /><span /></div>
-        <div className="ambient-rings" aria-hidden="true"><span /><span /></div>
-
-        <header className="header">
-          <div className="wrap">
-            <a className="brand" href="#top"><b>DB</b><span><strong>Daryll John L. Bonzo</strong><small>General Virtual Assistant</small></span></a>
-            <nav className="nav"><a href="#services">Services</a><a href="#strengths">Strengths</a><a href="#platforms">Platforms</a><a href="#connect">Connect</a></nav>
-            <LinkButton className="primary compact" href="https://wa.me/639241232790">Start a conversation</LinkButton>
-          </div>
-        </header>
-
-        <aside className="dock">{socials.map((item) => <a aria-label={item.label} href={item.href} key={item.label} rel="noreferrer" target="_blank"><span>{item.short}</span><small>{item.label}</small></a>)}</aside>
-
-        <main className="page" id="top">
-          <section className="hero is-visible" data-reveal>
-            <div className="copy">
-              <div className="badges"><em>General Virtual Assistant</em><em className="warm">Available for remote support</em></div>
-              <h1>Polished <span className="gradient-word">virtual assistance</span> for founders and teams who need more order behind the scenes.</h1>
-              <p>I help business owners protect their time, reduce clutter, and keep important work moving. From inbox and calendar support to research, spreadsheets, reports, and daily admin tasks, I provide structured remote assistance backed by a strong research and data-focused background.</p>
-              <div className="hero-callout">Built for clients who want a calm, organized, detail-conscious assistant they can keep growing with.</div>
-              <div className="actions"><LinkButton className="primary" href="https://wa.me/639241232790">Hire me on WhatsApp</LinkButton><LinkButton className="secondary" href="https://ph.linkedin.com/in/daryll-bonzo-02a0632b0">View LinkedIn</LinkButton></div>
-              <div className="chips"><span>Fast learner</span><span>Highly organized</span><span>Research-driven</span><span>Detail-oriented</span></div>
-              <div className="stats"><article><strong>Manila, Philippines</strong><p>Remote-ready support for clients who need dependable day-to-day assistance.</p></article><article><strong>6 support lanes</strong><p>Focused on recurring work that quietly keeps operations cleaner.</p></article><article><strong>Client-first workflow</strong><p>Built around clarity, consistency, and reliable follow-through.</p></article></div>
-            </div>
-
-            <div className="panel">
-              <span className="tag">Assistant Workflow View</span>
-              <h2>Support flow aligned to <span className="gradient-word">General Virtual Assistant</span> work.</h2>
-              <div className="panel-grid">
-                <article className="focus"><small>Selected service</small><h3>{current.title}</h3><p>{current.desc}</p>{current.bullets.map((item, index) => <div className="metric" key={item}><div><span>{item}</span><strong>{liveBars[index]}%</strong></div><i><b style={{ width: `${liveBars[index]}%` }} /></i></div>)}</article>
-                <article className="mini"><small>Inbox support</small><strong>Priority-based message flow</strong><p>Important requests stay visible instead of getting buried.</p></article>
-                <article className="mini"><small>Scheduling rhythm</small><strong>Cleaner calendar coordination</strong><p>Appointments and reminders are handled with structure.</p></article>
-                <article className="mini"><small>Research support</small><strong>Clear summaries for action</strong><p>Scattered information becomes output a client can review faster.</p></article>
-              </div>
-            </div>
-          </section>
-
-          <section className="section" data-reveal id="services">
-            <div className="heading"><small>Support Areas</small><h2>How I can support your day-to-day workflow as a General Virtual Assistant</h2><p>My role is to remove repetitive, time-consuming work from your plate so you can protect your energy for clients, decisions, strategy, and growth.</p></div>
-            <div className="services">
-              <div className="service-grid">{services.map((item, index) => <button aria-pressed={active === index} className={`service-card${active === index ? " active" : ""}`} key={item.title} onClick={() => setActive(index)} onFocus={() => setActive(index)} onMouseEnter={() => setActive(index)} type="button"><small>{item.label}</small><strong>{item.title}</strong><p>{item.desc}</p></button>)}</div>
-              <div className="preview"><small>Selected service</small><h3>{current.title}</h3><p>{current.desc}</p><div className="preview-tags">{current.bullets.map((item) => <span key={item}>{item}</span>)}</div><LinkButton className="primary" href="https://wa.me/639241232790">Discuss this support area</LinkButton></div>
-            </div>
-          </section>
-
-          <section className="section" data-reveal id="strengths">
-            <div className="heading"><small>Why Work With Me</small><h2>The qualities clients actually need from a dependable General Virtual Assistant</h2><p>I may still be growing into the title, but the work itself already matches my strengths: organization, research, data accuracy, reporting, communication, and quick adaptation.</p></div>
-            <div className="insights">
-              <div className="strength-grid">{strengths.map((item) => <article className="card" key={item.title}><small>{item.title}</small><p>{item.text}</p></article>)}</div>
-              <div className="timeline">{workflow.map((item) => <div className="step" key={item.step}><b>{item.step}</b><div><strong>{item.title}</strong><p>{item.text}</p></div></div>)}</div>
-            </div>
-          </section>
-
-          <section className="section" data-reveal id="confidence">
-            <div className="heading"><small>Client Confidence</small><h2>Why hiring me can still make sense for a client who needs reliable support now</h2><p>I do not need to overclaim experience to be valuable. What matters most is whether the person you hire can learn fast, protect details, stay organized, communicate clearly, and execute consistently. Those strengths are already part of how I work.</p></div>
-            <div className="proof-layout">
-              <div className="proof-grid">{positioning.map((item) => <article className="card proof-card" key={item.title}><small>{item.title}</small><p>{item.text}</p></article>)}</div>
-              <div className="promise-panel">
-                <small>What you can expect from me</small>
-                <h3>Support that feels polished, structured, and easy to trust.</h3>
-                <p>I aim to become the kind of assistant who reduces friction for the client, keeps the workflow organized, and makes daily operations feel lighter instead of heavier.</p>
-                <div className="promise-list">{expectations.map((item) => <div className="promise-item" key={item.title}><strong>{item.title}</strong><p>{item.text}</p></div>)}</div>
-                <LinkButton className="primary" href="https://wa.me/639241232790">Talk about your workflow</LinkButton>
-              </div>
-            </div>
-          </section>
-
-          <section className="section" data-reveal id="platforms">
-            <div className="heading"><small>Platforms and Workflow</small><h2>Comfortable with the everyday platforms remote clients already use</h2><p>I can work inside the tools commonly used for scheduling, communication, spreadsheets, documentation, task coordination, and research support.</p></div>
-            <div className="platform-cloud">
-              {platforms.map((tool, index) => (
-                <article className={`platform-chip is-${tool.id}`} key={tool.id} style={{ "--float-delay": `${index * -0.8}s`, "--float-duration": `${7.2 + (index % 3) * 1.2}s` }}>
-                  <div className="platform-mark">
-                    <PlatformIcon id={tool.id} />
-                  </div>
-                  <strong>{tool.label}</strong>
-                </article>
-              ))}
-            </div>
-            <div className="note">My background strengthened my ability to work with information-heavy tasks, organize details clearly, build clean reports, monitor updates, and stay accurate inside recurring workflows. Those habits translate naturally into dependable virtual assistance.</div>
-            <div className="result-grid">{liveSignals.map((item) => <article className="card result" key={item.title}><div className="result-head"><small>{item.stat}</small><strong className="result-percent">{item.liveLevel}%</strong></div><h3>{item.title}</h3><p>{item.text}</p><i><b style={{ width: `${item.liveLevel}%` }} /></i></article>)}</div>
-          </section>
-
-          <section className="section contact" data-reveal id="connect">
-            <div className="heading"><small>Let's Work Together</small><h2>If you need a General Virtual Assistant who can learn fast, stay organized, and protect the <span className="gradient-word">details</span> of your business, I am ready to help.</h2><p>I may still be growing into the title, but I already bring the mindset clients need from day one: structure, professionalism, clear communication, and careful execution. If you want dependable support that can grow with your workflow, reach out through any of the channels below.</p></div>
-            <div className="contact-highlights">{expectations.map((item) => <span key={item.title}>{item.title}</span>)}</div>
-            <div className="contact-grid">{socials.map((item) => <a aria-label={item.label} className="card contact-card" href={item.href} key={item.label} rel="noreferrer" target="_blank"><span>{item.short}</span><strong>{item.label}</strong><p>{item.note}</p></a>)}</div>
-            <div className="actions"><LinkButton className="primary" href="https://wa.me/639241232790">Message me on WhatsApp</LinkButton><LinkButton className="secondary" href="https://www.facebook.com/daryll.l.bonzo">View Facebook</LinkButton></div>
-          </section>
-        </main>
-
-        <footer className="footer"><div className="wrap"><div className="footer-identity"><strong>Daryll John L. Bonzo</strong><small>General Virtual Assistant | Manila, Philippines</small></div><p>Reliable support for admin, research, reporting, and smoother day-to-day remote operations.</p></div></footer>
-      </div>
-    </>
-  );
+  [data-reveal] { opacity: 1; transform: none; }
 }
