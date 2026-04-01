@@ -346,14 +346,27 @@ function PlatformIcon({ id }) {
 }
 
 function TimezoneBubble({ now, visitorZone }) {
+  const [flagError, setFlagError] = useState(false);
   const time = formatZoneTime(now, visitorZone.locale, visitorZone.timeZone);
   const date = formatZoneDate(now, visitorZone.locale, visitorZone.timeZone);
   const offset = formatOffsetLabel(now, visitorZone.timeZone);
+  const flagUrl = visitorZone.regionCode ? `https://flagcdn.com/w80/${visitorZone.regionCode.toLowerCase()}.png` : "";
 
   return (
     <aside className="timezone-bubble" aria-label={`Visitor timezone ${visitorZone.regionName}`}>
       <div className="timezone-avatar">
-        <span>{visitorZone.flag}</span>
+        {!flagError && flagUrl ? (
+          <img
+            alt={`${visitorZone.regionName} flag`}
+            className="timezone-flag"
+            height="24"
+            onError={() => setFlagError(true)}
+            src={flagUrl}
+            width="32"
+          />
+        ) : (
+          <span className="timezone-code">{visitorZone.regionCode}</span>
+        )}
         <i />
       </div>
       <div className="timezone-card">
