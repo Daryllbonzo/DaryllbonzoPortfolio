@@ -636,34 +636,31 @@ export default function App() {
           </section>
 
           <section className="section">
-            <h2 className="section-title">What I Offer as a General Virtual Assistant</h2>
-            <p className="section-copy">
-              My goal is to take repetitive, time-consuming work off your plate so you can focus on sales, strategy, client relationships, and business growth.
-            </p>
-            <div className="container">
-        <section className="section">
-          <h2>What I Offer as a General Virtual Assistant</h2>
+  <h2 className="section-title">What I Offer as a General Virtual Assistant</h2>
+  <p className="section-copy">
+    My goal is to take repetitive, time-consuming work off your plate so you can focus on sales, strategy, client relationships, and business growth.
+  </p>
 
-          <div className="grid-3">
-            {offers.map((item, index) => {
-              const descriptions = [
-                "I organize and prioritize your inbox so important messages are handled quickly and efficiently.",
-                "I manage schedules, set appointments, and ensure nothing important gets missed.",
-                "I keep your data clean, structured, and accurate for easy tracking and decision-making.",
-                "I gather useful information and turn it into clear, actionable insights.",
-                "I create well-formatted documents that are clean, professional, and easy to read.",
-                "I handle daily admin tasks consistently so your workflow stays smooth and organized."
-              ];
+  <div className="grid-3">
+    {offers.map((item, index) => {
+      const descriptions = [
+        "I organize and prioritize your inbox so important messages are handled quickly and efficiently.",
+        "I manage schedules, set appointments, and ensure nothing important gets missed.",
+        "I keep your data clean, structured, and accurate for easy tracking and decision-making.",
+        "I gather useful information and turn it into clear, actionable insights.",
+        "I create well-formatted documents that are clean, professional, and easy to read.",
+        "I handle daily admin tasks consistently so your workflow stays smooth and organized."
+      ];
 
-              return (
-                <div className="card" key={item}>
-                  <h3>{item}</h3>
-                  <p>{descriptions[index]}</p>
-                </div>
-              );
-            })}
-          </div>
-        </section>
+      return (
+        <div className="card offer-card" key={item}>
+          <h3>{item}</h3>
+          <p>{descriptions[index]}</p>
+        </div>
+      );
+    })}
+  </div>
+</section>
           <section className="section">
             <h2 className="section-title">Why I’m a Strong Fit Even While Transitioning</h2>
             <p className="section-copy">
